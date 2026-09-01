@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111827" />
+  <title>Home Training Program</title>
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --card:#ffffff;
+      --ink:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --accent:#1d4ed8;
+      --easy:#047857;
+      --hard:#b91c1c;
+      --strength:#7c3aed;
+      --warn:#92400e;
+      --shadow:0 8px 24px rgba(17,24,39,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.5;
+    }
+    button,a{touch-action:manipulation}
+    .app{
+      width:min(940px,100%);
+      margin:0 auto;
+      padding:18px 14px 56px;
+    }
+    .hero{
+      background:linear-gradient(135deg,#111827,#1f2937);
+      color:white;
+      border-radius:24px;
+      padding:24px 20px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+    .hero h1{margin:0 0 6px;font-size:clamp(1.6rem,5vw,2.3rem)}
+    .hero p{margin:0;color:#d1d5db;max-width:700px}
+    .menu{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin:14px 0 18px;
+    }
+    .menu button{
+      border:0;
+      border-radius:16px;
+      padding:16px 12px;
+      min-height:74px;
+      font:inherit;
+      font-weight:800;
+      font-size:1rem;
+      cursor:pointer;
+      background:var(--card);
+      color:var(--ink);
+      box-shadow:var(--shadow);
+      text-align:left;
+    }
+    .menu button span{display:block;font-size:.78rem;color:var(--muted);font-weight:600;margin-top:3px}
+    .menu .easy{border-left:6px solid var(--easy)}
+    .menu .hard{border-left:6px solid var(--hard)}
+    .menu .strength{border-left:6px solid var(--strength)}
+    .menu .overview{border-left:6px solid var(--accent)}
+    .panel{display:none}
+    .panel.active{display:block}
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin:12px 0;
+    }
+    .card h2,.card h3{margin-top:0}
+    .session-title{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .badge{
+      white-space:nowrap;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.75rem;
+      font-weight:800;
+      background:#eef2ff;
+      color:#3730a3;
+    }
+    .rx{
+      font-size:1.25rem;
+      font-weight:900;
+      margin:.2rem 0 .7rem;
+    }
+    .muted{color:var(--muted)}
+    .callout{
+      padding:12px 14px;
+      border-radius:14px;
+      background:#f9fafb;
+      border:1px solid var(--line);
+      margin:12px 0;
+    }
+    .callout strong{display:block;margin-bottom:3px}
+    .warning{background:#fffbeb;border-color:#fde68a;color:#78350f}
+    .success{background:#ecfdf5;border-color:#a7f3d0;color:#065f46}
+    ul,ol{padding-left:1.25rem}
+    li+li{margin-top:.35rem}
+    .exercise{
+      border-top:1px solid var(--line);
+      padding-top:17px;
+      margin-top:17px;
+    }
+    .exercise:first-of-type{border-top:0;padding-top:0;margin-top:0}
+    .exercise h3{margin-bottom:2px}
+    .exercise .rx{font-size:1.08rem}
+    details{
+      border:1px solid var(--line);
+      border-radius:14px;
+      margin-top:10px;
+      overflow:hidden;
+      background:#fff;
+    }
+    summary{
+      cursor:pointer;
+      font-weight:800;
+      padding:12px 14px;
+      user-select:none;
+    }
+    details > div{padding:0 14px 14px}
+    .video{
+      position:relative;
+      width:100%;
+      aspect-ratio:16/9;
+      margin:10px 0 6px;
+      border-radius:14px;
+      overflow:hidden;
+      background:#111827;
+    }
+    .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .video-link{
+      display:inline-block;
+      margin-top:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#eef2ff;
+      color:#1e40af;
+      font-weight:800;
+      text-decoration:none;
+    }
+    .video-link:active{transform:translateY(1px)}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:.94rem;
+    }
+    th,td{
+      padding:10px 8px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align:top;
+    }
+    th{font-size:.78rem;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+    .back{
+      display:block;
+      width:100%;
+      border:0;
+      border-radius:14px;
+      padding:13px;
+      margin:14px 0;
+      background:#111827;
+      color:#fff;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .timer{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .timer button{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+    #timerBox{
+      position:sticky;
+      bottom:10px;
+      z-index:9;
+      display:none;
+      background:#111827;
+      color:#fff;
+      margin:12px auto;
+      padding:12px 14px;
+      border-radius:15px;
+      width:min(420px,calc(100% - 12px));
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      text-align:center;
+      font-weight:900;
+    }
+    .footer{
+      color:var(--muted);
+      font-size:.82rem;
+      text-align:center;
+      margin-top:24px;
+    }
+    @media(min-width:700px){
+      .app{padding:28px 22px 72px}
+      .menu{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .card{padding:22px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="hero" id="home">
+    <h1>Home Training Program</h1>
+    <p>Two adjustable dumbbells + rowing machine. Priorities: core strength, larger arms, efficient strength work, frequent rowing, and enough recovery for soccer.</p>
+  </header>
+
+  <nav class="menu" aria-label="Workout menu">
+    <button class="overview" onclick="showPanel('overview')">Weekly Plan<span>How the 4 training days fit together</span></button>
+    <button class="easy" onclick="showPanel('light')">Light Rowing<span>8–12 min · mood / movement</span></button>
+    <button class="hard" onclick="showPanel('power')">Heavy Row 1<span>Power-focused · ~12–15 min</span></button>
+    <button class="hard" onclick="showPanel('intervals')">Heavy Row 2<span>Intervals · ~18 min</span></button>
+    <button class="strength" onclick="showPanel('programA')">Program A<span>Squat · chest · back · core</span></button>
+    <button class="strength" onclick="showPanel('programB')">Program B<span>Hinge · shoulders · arms</span></button>
+  </nav>
+
+  <main>
+    <section id="overview" class="panel active">
+      <div class="card">
+        <div class="session-title">
+          <div><h2>Weekly structure</h2><p class="muted">Four purposeful training days; the other mornings stay easy.</p></div>
+          <span class="badge">OVERVIEW</span>
+        </div>
+        <table>
+          <thead><tr><th>Day</th><th>Morning</th><th>Main session</th></tr></thead>
+          <tbody>
+            <tr><td>Day 1</td><td><strong>Heavy Row 1 — Power</strong></td><td>—</td></tr>
+            <tr><td>Day 2</td><td>Light row 8–12 min</td><td><strong>Program A</strong> + 5–8 min easy row</td></tr>
+            <tr><td>Day 3</td><td>Light row 8–12 min</td><td>Recovery</td></tr>
+            <tr><td>Day 4</td><td><strong>Heavy Row 2 — Intervals</strong></td><td>—</td></tr>
+            <tr><td>Day 5</td><td>Light row 8–12 min</td><td><strong>Program B</strong> + 5–8 min easy row</td></tr>
+            <tr><td>Day 6</td><td>Light row 8–15 min</td><td>Soccer if scheduled</td></tr>
+            <tr><td>Day 7</td><td>Very easy row or rest</td><td>Soccer / recovery</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout warning">
+          <strong>Soccer rule</strong>
+          Move the days around your soccer session. Ideally keep the day immediately before soccer light. Avoid placing hard rowing intervals or the sumo-squat session immediately before soccer when possible.
+        </div>
+
+        <div class="callout success">
+          <strong>Core strategy</strong>
+          No separate plank routine is required initially. Rowing provides repeated trunk stabilization; sumo squats, one-arm rows, RDLs and standing presses add loaded bracing; suitcase carries provide heavy one-sided stabilization that rowing does not.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Progression rule</h2>
+        <p>For a movement prescribed as <strong>3 × 8–12</strong>, use a weight that leaves roughly <strong>2 clean repetitions in reserve</strong>.</p>
+        <p><strong>Example:</strong> 10/9/8 → 11/10/9 → eventually 12/12/12. Once you can complete the top of the range with good form, increase the dumbbell one increment and build up again.</p>
+        <p>Do not progressively overload the light morning rows. They are there to make you feel better, not to create fatigue.</p>
+      </div>
+
+      <div class="card">
+        <h2>First two weeks</h2>
+        <ul>
+          <li><strong>Week 1:</strong> 2 sets per strength exercise; 3 sets for curls/extensions. Do the power row hard, but keep the second rowing session moderate.</li>
+          <li><strong>Week 2:</strong> Move compounds to 3 sets; both heavy rowing sessions can follow the full prescription.</li>
+          <li><strong>Week 3 onward:</strong> Full program.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="light" class="panel">
+      <div class="card">
+        <div class="session-title">
+          <div><h2>Light Rowing</h2><p class="muted">Morning activation, mood and movement — not a performance test.</p></div>
+          <span class="badge">8–12 MIN</span>
+        </div>
+        <div class="rx">RPE 2–3 / 10</div>
+        <ol>
+          <li><strong>2 min</strong> extremely easy.</li>
+          <li><strong>6–8 min</strong> comfortable continuous rowing.</li>
+          <li><strong>1–2 min</strong> extremely easy cooldown.</li>
+        </ol>
+        <div class="callout success">
+          <strong>Correct intensity</strong>
+          You can speak normally and step off the rower feeling more awake, not tired. Roughly 18–22 strokes/min is a reasonable guide, but comfort matters more than the number.
+        </div>
+        <details>
+          <summary>Rowing technique</summary>
+          <div>
+            <p><strong>Drive:</strong> legs → torso → arms. <strong>Recovery:</strong> arms → torso → legs.</p>
+            <div class="video">
+              <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/zQ82RYIFLN8" title="Concept2 Correct Rowing Technique" allowfullscreen></iframe>
+            </div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=zQ82RYIFLN8" target="_blank" rel="noopener">Open rowing technique on YouTube</a>
+          </div>
+        </details>
+      </div>
+      <button class="back" onclick="goHome()">← Back to workout menu</button>
+    </section>
+
+    <section id="power" class="panel">
+      <div class="card">
+        <div class="session-title">
+          <div><h2>Heavy Row 1 — Power</h2><p class="muted">Short, forceful strokes. Strength-like rowing without turning it into a long cardio session.</p></div>
+          <span class="badge">12–15 MIN</span>
+        </div>
+        <div class="rx">8 rounds: 10 powerful strokes + 50–60 sec very easy</div>
+        <ol>
+          <li><strong>Warm-up:</strong> 3–4 min easy.</li>
+          <li><strong>Main set:</strong> 8 rounds of 10 powerful strokes, then 50–60 sec very easy.</li>
+          <li><strong>Cooldown:</strong> 2–3 min easy.</li>
+        </ol>
+        <div class="callout">
+          <strong>Power cue</strong>
+          Think “strong stroke, not frantic stroke.” Around 18–22 strokes/min during the power work is fine. Produce force through the legs, transfer it through a braced torso, and finish with the arms.
+        </div>
+        <div class="callout warning">
+          <strong>Do not</strong>
+          Set the resistance to maximum and grind. The goal is controlled power and clean technique.
+        </div>
+        <div class="timer">
+          <button onclick="startTimer(60)">60 sec recovery timer</button>
+          <button onclick="startTimer(180)">3 min warm-up/cooldown</button>
+        </div>
+        <details open>
+          <summary>Technique video</summary>
+          <div>
+            <div class="video">
+              <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/zQ82RYIFLN8" title="Concept2 Correct Rowing Technique" allowfullscreen></iframe>
+            </div>
+            <a class="video-link" href="https://www.youtube.com/watch?v=zQ82RYIFLN8" target="_blank" rel="noopener">Open on YouTube</a>
+          </div>
+        </details>
+      </div>
+      <button class="back" onclick="goHome()">← Back to workout menu</button>
+    </section>
+
+    <section id="intervals" class="panel">
+      <div class="card">
+        <div class="session-title">
+          <div><h2>Heavy Row 2 — Intervals</h2><p class="muted">Your harder conditioning session. Short because cardio is not the main limiting goal.</p></div>
+          <span class="badge">~18 MIN</span>
+        </div>
+        <div class="rx">6 × (45 sec hard + 75 sec very easy)</div>
+        <ol>
+          <li><strong>Warm-up:</strong> 3 min easy.</li>
+          <li><strong>Main set:</strong> 6 rounds of 45 sec hard + 75 sec very easy.</li>
+          <li><strong>Cooldown:</strong> 3 min easy.</li>
+        </ol>
+        <div class="callout success">
+          <strong>Hard = about RPE 8/10</strong>
+          Not an all-out sprint. The sixth interval should still look technically similar to the first. A hard-stroke rate around 24–30/min is a reasonable guide.
+        </div>
+        <div class="timer">
+          <button onclick="startTimer(45)">45 sec hard</button>
+          <button onclick="startTimer(75)">75 sec easy</button>
+          <button onclick="startTimer(180)">3 min</button>
+        </div>
+        <details>
+          <summary>Technique reminder</summary>
+          <div>
+            <p>Keep the sequence <strong>legs → torso → arms</strong>. Higher effort should come from more force as well as cadence, not from shortening the stroke into frantic arm pulling.</p>
+            <div class="video">
+              <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/zQ82RYIFLN8" title="Concept2 Correct Rowing Technique" allowfullscreen></iframe>
+            </div>
+          </div>
+        </details>
+      </div>
+      <button class="back" onclick="goHome()">← Back to workout menu</button>
+    </section>
+
+    <section id="programA" class="panel">
+      <div class="card">
+        <div class="session-title">
+          <div><h2>Program A</h2><p class="muted">Squat · chest · back · dedicated core</p></div>
+          <span class="badge">25–35 MIN</span>
+        </div>
+        <div class="callout">
+          <strong>Efficient pairing</strong>
+          Sumo squat → floor press → rest ~90 sec, repeat ×3. Then one-arm row → suitcase carry → rest 60–90 sec, repeat ×3.
+        </div>
+
+        <article class="exercise">
+          <h3>1. Dumbbell Sumo Squat</h3>
+          <div class="rx">3 × 8–12</div>
+          <p><strong>Purpose:</strong> legs, glutes and loaded trunk bracing with less need for additional squat/lunge volume.</p>
+          <ul>
+            <li>Stand wider than shoulder width; toes slightly outward.</li>
+            <li>Hold one dumbbell vertically between the legs; later use more load if needed.</li>
+            <li>Brace the abdomen before descending.</li>
+            <li>Keep knees tracking in the direction of the toes.</li>
+            <li>Use a controlled, comfortable depth. Pain-free movement matters more than maximum depth.</li>
+          </ul>
+          <div class="callout warning"><strong>Avoid:</strong> knees collapsing inward, bouncing at the bottom, or forcing depth.</div>
+          <a class="video-link" href="https://www.youtube.com/results?search_query=dumbbell+sumo+squat+proper+form" target="_blank" rel="noopener">YouTube: dumbbell sumo squat technique</a>
+        </article>
+
+        <article class="exercise">
+          <h3>2. Dumbbell Floor Press</h3>
+          <div class="rx">3 × 8–12</div>
+          <p><strong>Purpose:</strong> chest + triceps + front shoulders.</p>
+          <ul>
+            <li>Lie on your back with knees bent and feet planted.</li>
+            <li>Lower the dumbbells under control until the upper arms gently touch the floor.</li>
+            <li>Keep elbows somewhat tucked rather than flared straight sideways.</li>
+            <li>Press upward without bouncing the upper arms off the floor.</li>
+          </ul>
+          <details open>
+            <summary>Video demonstration</summary>
+            <div>
+              <div class="video">
+                <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/T0Y3OBF1bNI" title="Dumbbell Floor Press Demonstration" allowfullscreen></iframe>
+              </div>
+              <a class="video-link" href="https://www.youtube.com/watch?v=T0Y3OBF1bNI" target="_blank" rel="noopener">Open on YouTube</a>
+            </div>
+          </details>
+        </article>
+
+        <article class="exercise">
+          <h3>3. One-Arm Dumbbell Row</h3>
+          <div class="rx">3 × 8–12 each side</div>
+          <p><strong>Purpose:</strong> heavier back and biceps loading than the rowing machine provides.</p>
+          <ul>
+            <li>Brace the free hand on a solid chair, sofa or other stable surface.</li>
+            <li>Keep your torso stable and spine neutral.</li>
+            <li>Pull the dumbbell toward the hip/lower ribs.</li>
+            <li>Lower under control and reach naturally at the bottom.</li>
+          </ul>
+          <div class="callout warning"><strong>Avoid:</strong> rotating the whole torso to throw the dumbbell upward.</div>
+          <a class="video-link" href="https://www.youtube.com/results?search_query=one+arm+dumbbell+row+proper+form" target="_blank" rel="noopener">YouTube: one-arm dumbbell row technique</a>
+        </article>
+
+        <article class="exercise">
+          <h3>4. Suitcase Carry / Hold</h3>
+          <div class="rx">3 × 30–45 sec each side</div>
+          <p><strong>Purpose:</strong> heavy one-sided core stabilization and grip. This complements the more repetitive trunk work from rowing.</p>
+          <ul>
+            <li>Hold one heavy dumbbell at your side.</li>
+            <li>Stand tall with shoulders level and ribs controlled.</li>
+            <li>Walk slowly if you have space; otherwise stand still.</li>
+            <li>Stay upright as if the dumbbell were not trying to pull you sideways.</li>
+          </ul>
+          <div class="callout warning"><strong>Avoid:</strong> leaning toward or away from the weight.</div>
+          <a class="video-link" href="https://www.youtube.com/results?search_query=dumbbell+suitcase+carry+proper+form" target="_blank" rel="noopener">YouTube: suitcase carry technique</a>
+        </article>
+
+        <div class="callout success">
+          <strong>Finish</strong>
+          5–8 min very easy rowing, RPE 2–3. This is a cooldown, not another hard training block.
+        </div>
+      </div>
+      <button class="back" onclick="goHome()">← Back to workout menu</button>
+    </section>
+
+    <section id="programB" class="panel">
+      <div class="card">
+        <div class="session-title">
+          <div><h2>Program B</h2><p class="muted">Posterior chain · shoulders · arms</p></div>
+          <span class="badge">25–35 MIN</span>
+        </div>
+        <div class="callout">
+          <strong>Efficient pairing</strong>
+          Romanian deadlift → overhead press → rest ~90 sec, repeat ×3. Then hammer curl → triceps extension → rest 60–90 sec, repeat ×4.
+        </div>
+
+        <article class="exercise">
+          <h3>1. Dumbbell Romanian Deadlift</h3>
+          <div class="rx">3 × 8–12</div>
+          <p><strong>Purpose:</strong> hamstrings, glutes, posterior chain and heavy trunk bracing.</p>
+          <ul>
+            <li>Stand holding both dumbbells in front of the thighs.</li>
+            <li>Keep a small bend in the knees.</li>
+            <li>Brace, then push the hips backward.</li>
+            <li>Keep dumbbells close to the legs.</li>
+            <li>Stop when you feel a strong hamstring stretch while maintaining a controlled spine position.</li>
+            <li>Drive the hips forward to stand.</li>
+          </ul>
+          <div class="callout"><strong>Main cue:</strong> “hips backward,” not “squat down” and not “reach the dumbbells to the floor.”</div>
+          <details open>
+            <summary>NASM video demonstration</summary>
+            <div>
+              <div class="video">
+                <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/V8Hdl1FiNt4" title="NASM Dumbbell Romanian Deadlift" allowfullscreen></iframe>
+              </div>
+              <a class="video-link" href="https://www.youtube.com/watch?v=V8Hdl1FiNt4" target="_blank" rel="noopener">Open on YouTube</a>
+            </div>
+          </details>
+        </article>
+
+        <article class="exercise">
+          <h3>2. Standing Dumbbell Overhead Press</h3>
+          <div class="rx">3 × 6–10</div>
+          <p><strong>Purpose:</strong> shoulders + triceps + standing core stabilization.</p>
+          <ul>
+            <li>Start with dumbbells at shoulder/ear level.</li>
+            <li>Brace the abdomen and keep the ribs controlled.</li>
+            <li>Press overhead to a comfortable lockout.</li>
+            <li>Lower under control.</li>
+          </ul>
+          <div class="callout warning"><strong>Avoid:</strong> leaning substantially backward to finish the rep. Reduce the weight if necessary.</div>
+          <details open>
+            <summary>Video demonstration</summary>
+            <div>
+              <div class="video">
+                <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/e_f5oodNEcI" title="Standing Dumbbell Shoulder Press Demonstration" allowfullscreen></iframe>
+              </div>
+              <a class="video-link" href="https://www.youtube.com/watch?v=e_f5oodNEcI" target="_blank" rel="noopener">Open on YouTube</a>
+            </div>
+          </details>
+        </article>
+
+        <article class="exercise">
+          <h3>3. Dumbbell Hammer Curl</h3>
+          <div class="rx">4 × 8–12</div>
+          <p><strong>Purpose:</strong> direct arm-size work for the biceps/brachialis and forearms.</p>
+          <ul>
+            <li>Stand tall with palms facing inward.</li>
+            <li>Keep elbows close to the sides.</li>
+            <li>Curl without swinging the torso.</li>
+            <li>Lower slowly and completely under control.</li>
+          </ul>
+          <details>
+            <summary>Video demonstration</summary>
+            <div>
+              <div class="video">
+                <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/FAKh_gifviY" title="Hammer Curl Demonstration" allowfullscreen></iframe>
+              </div>
+              <a class="video-link" href="https://www.youtube.com/watch?v=FAKh_gifviY" target="_blank" rel="noopener">Open on YouTube</a>
+            </div>
+          </details>
+        </article>
+
+        <article class="exercise">
+          <h3>4. Overhead Dumbbell Triceps Extension</h3>
+          <div class="rx">4 × 10–15</div>
+          <p><strong>Purpose:</strong> direct triceps work for upper-arm size.</p>
+          <ul>
+            <li>Start with one dumbbell held securely with both hands overhead.</li>
+            <li>Lower it behind the head primarily by bending the elbows.</li>
+            <li>Keep the upper arms reasonably stable.</li>
+            <li>Extend the elbows smoothly; do not throw the weight.</li>
+          </ul>
+          <details>
+            <summary>Video demonstration</summary>
+            <div>
+              <div class="video">
+                <iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/M9a_mR0xbgk" title="Overhead Triceps Extension Form" allowfullscreen></iframe>
+              </div>
+              <a class="video-link" href="https://www.youtube.com/watch?v=M9a_mR0xbgk" target="_blank" rel="noopener">Open on YouTube</a>
+            </div>
+          </details>
+        </article>
+
+        <div class="callout success">
+          <strong>Finish</strong>
+          5–8 min very easy rowing, RPE 2–3. Keep the real hard rowing on the two dedicated rowing mornings.
+        </div>
+      </div>
+      <button class="back" onclick="goHome()">← Back to workout menu</button>
+    </section>
+  </main>
+
+  <div id="timerBox" aria-live="polite"></div>
+
+  <div class="footer">
+    Training guide for personal use. Stop an exercise that causes sharp or unusual pain and adjust load/range as needed.
+  </div>
+</div>
+
+<script>
+  function showPanel(id){
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+    history.replaceState(null,'','#'+id);
+  }
+  function goHome(){
+    showPanel('overview');
+  }
+
+  let timerHandle = null;
+  function startTimer(seconds){
+    if(timerHandle) clearInterval(timerHandle);
+    const box = document.getElementById('timerBox');
+    box.style.display = 'block';
+    let left = seconds;
+    const render = () => {
+      const m = Math.floor(left / 60);
+      const s = String(left % 60).padStart(2,'0');
+      box.textContent = `Timer: ${m}:${s}`;
+    };
+    render();
+    timerHandle = setInterval(() => {
+      left -= 1;
+      render();
+      if(left <= 0){
+        clearInterval(timerHandle);
+        timerHandle = null;
+        box.textContent = 'Timer complete';
+        if(navigator.vibrate) navigator.vibrate([200,100,200]);
+        setTimeout(()=>{ box.style.display='none'; }, 2500);
+      }
+    },1000);
+  }
+
+  const initial = location.hash.replace('#','');
+  if(['overview','light','power','intervals','programA','programB'].includes(initial)){
+    showPanel(initial);
+  }
+</script>
+</body>
+</html>
